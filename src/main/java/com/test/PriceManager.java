@@ -41,18 +41,15 @@ public class PriceManager {
 
                         //case 2
                         if (newPrice.getBegin().after(oldPrice.getBegin()) && newPrice.getBegin().before(oldPrice.getEnd()) && newPrice.getEnd().after(oldPrice.getEnd())) {
-                            if (newPrice.getValue() == oldPrice.getValue()) {
-                                oldPrice.setEnd(newPrice.getEnd());
-                                iter.remove();
-                            } else {
-                                Date savedEnd = oldPrice.getEnd();
-                                oldPrice.setEnd(newPrice.getBegin());
-                                Price secondPart = newPrice.copy();
-                                secondPart.setEnd(savedEnd);
-                                oldPrices.add(secondPart);
-                                newPrice.setBegin(savedEnd);
-                                isEnd = false;
-                            }
+
+                            Date savedEnd = oldPrice.getEnd();
+                            oldPrice.setEnd(newPrice.getBegin());
+                            Price secondPart = newPrice.copy();
+                            secondPart.setEnd(savedEnd);
+                            oldPrices.add(secondPart);
+                            newPrice.setBegin(savedEnd);
+                            isEnd = false;
+
                         } else {
                             //mirror case
                             if (newPrice.getBegin().before(oldPrice.getBegin()) && newPrice.getEnd().after(oldPrice.getBegin()) && newPrice.getEnd().before(oldPrice.getEnd())) {
@@ -75,6 +72,8 @@ public class PriceManager {
 
             }
         }
+        if (newPrices.size() > 0)
+            oldPrices.addAll(newPrices);
 
         //union all
         Iterator<Price> priceIterator = oldPrices.iterator();
